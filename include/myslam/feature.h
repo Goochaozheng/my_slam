@@ -32,7 +32,7 @@ public:
     Feature() {}
 
     Feature(std::weak_ptr<Frame> frame, const cv::KeyPoint &kp)
-        : frame_(frame), position_(&kp) {}
+        : frame_(frame), position_(kp) {}
 
 };
     

@@ -3,7 +3,7 @@
 #ifndef MYSLAM_FRAME_H
 #define MYSLAM_FRAME_H
 
-// #include "myslam/camera.h"
+#include "myslam/camera.h"
 #include "myslam/common_include.h"
 
 namespace myslam{
