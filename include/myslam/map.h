@@ -22,8 +22,8 @@ public:
 
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
     typedef std::shared_ptr<Map> Ptr;
-    typedef std::unordered_map<unsigned long, MapPoint::Ptr> LandmarksType;
-    typedef std::unordered_map<unsigned long, Frame::Ptr> KeyframesType;
+    typedef std::unordered_map<unsigned long, MapPoint::Ptr> LandmarksType;     // map of map point, id as key
+    typedef std::unordered_map<unsigned long, Frame::Ptr> KeyframesType;        // map of keyframe, id as key
 
     Map() {}
 
@@ -46,20 +46,25 @@ public:
     }
 
     // Get all keyframes
-    LandmarksType GetAllKeyframe(){
+    KeyframesType GetAllKeyframe(){
         std::unique_lock<std::mutex> lck(data_mutex_);
         return keyframes_;
     }
 
     // Get active keyframes
-    LandmarksType GetActiveKeyframes(){
+    KeyframesType GetActiveKeyframes(){
         std::unique_lock<std::mutex> lck(data_mutex_);
         return active_keyframes_;
     }
 
+    // Clean map point with no observation
+    void CleanMap();
 
 private:
 
+    // Set one old keyframe to inactive
+    // Close frame or furthest frame in curret active keyframes will be remove
+    // Number of active keyframes defined by num_active_keyframes_
     void RemoveOldKeyframe();
 
     std::mutex data_mutex_;

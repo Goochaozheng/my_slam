@@ -4,7 +4,7 @@
 
 #include "myslam/common_include.h"
 
-namespace maslam
+namespace myslam
 {
 
 // Pinhole Stereo Camera Model
@@ -22,7 +22,7 @@ public:
             cy_ = 0,
             baseline_ = 0;
 
-    // Camera Extrinsics
+    // Camera Extrinsics, from left/right camera to stereo centric
     SE3 pose_;
     SE3 pose_inv_;
 
@@ -46,7 +46,7 @@ public:
     }
 
     // Coordinate transform: world, camera, pixel
-    Vec3 world2camera(const Vec3 &p_w, const SE3 &T_c_w);
+    Vec3 world2camera(const Vec3 &p_w, const SE3 &T_c_w);       // p_camera = camera_extrinsics * T_c_w * p_world
     Vec3 camera2world(const Vec3 &p_c, const SE3 &T_c_w);
     
     Vec2 camera2pixel(const Vec3 &p_c);

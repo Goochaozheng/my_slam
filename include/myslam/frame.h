@@ -13,7 +13,8 @@ struct MapPoint;
 
 /*
  * one pair of stereo image with unique id & timestamp
- * pose & keyframe is managed by each frame
+ * one frame can be set as keyframe, which will be added to map
+ * pose & keyframe is owned by each frame
  */
 struct Frame{
 public:
@@ -25,7 +26,7 @@ public:
     unsigned long keyframe_id_ = 0;     // id of keyframe
     bool is_keyframe_ = false;          // is keyframe or not
     double time_stamp_;                 // timestamp
-    SE3 pose_;                          // pose, in Tcw?
+    SE3 pose_;                          // pose, in Tcw, p_frame = Tcw * p_world_origin
     std::mutex pose_mutex_;             // mutex lock for pose
     cv::Mat left_img_, right_img_;      // stereo image
 
@@ -34,9 +35,10 @@ public:
 
     Frame() {}
 
-    Frame(long id, double time_stamp, const SE3 &pose, const Mat &left, const Mat &right);
+    Frame(long id, double time_stamp, const SE3 &pose, const Mat &left, const Mat &right)
+        : id_(id), time_stamp_(time_stamp), pose_(pose), left_img_(left), right_img_(right) {}
 
-    // get pose of this frame
+    // get pose under world coordinate of this frame
     SE3 Pose(){
         std::unique_lock<std::mutex> lck(pose_mutex_); // take the ownership of mutex object and unlock automatically when unique_lock object destoried
         return pose_;
@@ -48,8 +50,10 @@ public:
         pose_ = pose;
     }
 
+    // Set current frame to keyframe and assign unique keyframe id
     void SetKeyFrame();
 
+    // Create frame and assign unique frame id using a factory method
     static Frame::Ptr CreateFrame();
 
 };
