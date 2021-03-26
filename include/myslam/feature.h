@@ -14,7 +14,6 @@ struct MapPoint;
  * 2D feature points on image
  * one feature point will be mapped to a 3D map point
  */
-
 struct Feature{
 public:
 

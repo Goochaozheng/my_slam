@@ -5,11 +5,11 @@
 
 #include "myslam/camera.h"
 #include "myslam/common_include.h"
+#include "myslam/feature.h"
+#include "myslam/mappoint.h"
 
 namespace myslam{
 
-struct Feature;
-struct MapPoint;
 
 /*
  * one pair of stereo image with unique id & timestamp
@@ -30,8 +30,8 @@ public:
     std::mutex pose_mutex_;             // mutex lock for pose
     cv::Mat left_img_, right_img_;      // stereo image
 
-    std::vector<std::shared_ptr<Feature>> feature_left_;    // extracted features in left image
-    std::vector<std::shared_ptr<Feature>> feature_right_;   // corresponding features in right image, set to nullptr if no matches
+    std::vector<Feature::Ptr> feature_left_;    // extracted features in left image
+    std::vector<Feature::Ptr> feature_right_;   // corresponding features in right image, set to nullptr if no matches
 
     Frame() {}
 

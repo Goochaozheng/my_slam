@@ -87,7 +87,7 @@ void Map::RemoveOldKeyframe(){
     LOG(INFO) << "remove keyframe " << frame_to_remove->keyframe_id_; 
     active_keyframes_.erase(frame_to_remove->keyframe_id_);
 
-    // Remove landmarks and keyframe observation
+    // Remove landmarks observation of old frame
     for(auto feat : frame_to_remove->feature_left_){
         auto mp = feat->map_point_.lock();
         if(mp){
